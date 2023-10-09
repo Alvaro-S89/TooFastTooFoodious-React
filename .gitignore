@@ -26,7 +26,7 @@ dist-ssr
 *.svg
 
 public/img/*
-data/categories/*
-data/productr/*
+# data/categories
+# data/products
 
 
