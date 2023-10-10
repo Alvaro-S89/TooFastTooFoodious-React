@@ -1,10 +1,29 @@
 import { Outlet } from "react-router-dom"
+import  Modal  from "react-modal" 
 import Sidebar from "../components/Sidebar"
 import Resume from "../components/Resume"
+import { useProducts } from "../hooks/useProducts"
+import ModalProduct from "../components/ModalProduct"
 
+const customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+  },
+};
+
+Modal.setAppElement('#root')
 
 export default function Layout() {
+
+  const { modal, handleClickModal } = useProducts()
+
   return (
+    <>
     <div className="md:flex">
       <Sidebar />
 
@@ -14,5 +33,10 @@ export default function Layout() {
 
       <Resume />
     </div>
+
+      <Modal isOpen={modal} style={customStyles}>
+        <ModalProduct />
+      </Modal>
+    </>
   )
 }
