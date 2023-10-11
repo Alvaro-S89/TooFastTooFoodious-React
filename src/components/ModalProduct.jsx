@@ -1,11 +1,20 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useProducts } from '../hooks/useProducts'
 
 
 export default function ModalProduct() {
 
-    const { product, handleClickModal  } = useProducts()
+    const { product, handleClickModal, handleAddOrder, order } = useProducts()
     const [quantity, setQuantity] = useState(1)
+    const [edit, setEdit] = useState(false)
+
+    useEffect(() => {
+        if(order.some(orderArr => orderArr.id === product.id)) {
+            const editProduct = order.filter( orderArr => orderArr.id === product.id)[0]
+            setQuantity(editProduct.quantity)
+            setEdit(true)
+        }
+    }, [order])
 
   return (
     <div className='md:flex items-center gap-10'>
@@ -59,8 +68,13 @@ export default function ModalProduct() {
 
             <button 
                 type='button'
-                className='bg-orange-300 hover:bg-orange-400 px-5 py-2 mt-5 font-bold uppercase rounded cursor-pointer'>
-                Añadir a la cesta
+                className='bg-orange-300 hover:bg-orange-400 px-5 py-2 mt-5 font-bold uppercase rounded cursor-pointer'
+                onClick={() => {
+                    handleAddOrder({...product, quantity})
+                    handleClickModal()
+                }}
+                >
+                {edit ? 'Modificar pedido' : 'Añadir a la cesta'}
             </button>
         </div>
     </div>

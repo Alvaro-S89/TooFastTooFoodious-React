@@ -4,6 +4,9 @@ import Sidebar from "../components/Sidebar"
 import Resume from "../components/Resume"
 import { useProducts } from "../hooks/useProducts"
 import ModalProduct from "../components/ModalProduct"
+import { ToastContainer } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
+
 
 const customStyles = {
   content: {
@@ -37,6 +40,8 @@ export default function Layout() {
       <Modal isOpen={modal} style={customStyles}>
         <ModalProduct />
       </Modal>
+
+      <ToastContainer />
     </>
   )
 }
