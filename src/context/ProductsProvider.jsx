@@ -1,14 +1,14 @@
 import { createContext, useEffect, useState } from 'react'
-import { categories as dbCategories } from "../data/categories"
 import { toast } from 'react-toastify'
+import axios from 'axios'
 
 
 const ProductsContext = createContext()
 
 const ProductsProvider = ({children}) => {
 
-    const [categories, setCategories] = useState(dbCategories)
-    const [currentCategory, setCurrentCategory] = useState(categories[0])
+    const [categories, setCategories] = useState([])
+    const [currentCategory, setCurrentCategory] = useState({})
     const [modal, setModal] = useState(false)
     const [product, setProduct] = useState({})
     const [order, setOrder] = useState([])
@@ -18,6 +18,21 @@ const ProductsProvider = ({children}) => {
         const finalTotal = order.reduce((total, product) => (product.price * product.quantity) + total, 0)
         setTotal(finalTotal)
     }, [order])
+
+    const getCategories = async () => {
+        try {
+            const response = await axios(`${import.meta.env.VITE_API_URL}/api/categories`)
+            setCategories(response.data.data)
+            setCurrentCategory(response.data.data[0])
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+      getCategories()
+    }, [])
+    
 
 
     const handleClickCategory = id => {
