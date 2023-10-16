@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
-import axios from 'axios'
+import client from '../utils/axios'
+
 
 
 const ProductsContext = createContext()
@@ -21,7 +22,7 @@ const ProductsProvider = ({children}) => {
 
     const getCategories = async () => {
         try {
-            const response = await axios(`${import.meta.env.VITE_API_URL}/api/categories`)
+            const response = await client('/api/categories')
             setCategories(response.data.data)
             setCurrentCategory(response.data.data[0])
         } catch (error) {
