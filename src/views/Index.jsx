@@ -1,14 +1,23 @@
 import React from 'react'
-import { products as data } from '../data/products'
 import Product from '../components/Product'
 import { useProducts } from '../hooks/useProducts'
-import Category from '../components/Category'
+import useSWR from 'swr'
+import client from '../utils/axios'
+import DotLoader from "react-spinners/ClipLoader";
+
 
 export default function Index() {
 
   const { currentCategory } = useProducts()
 
-  const products = data.filter(product => product.category_id === currentCategory.id)
+  //swr query
+  const fetcher = () => client('/api/products').then(data=> data.data)
+  const{ data, error, isLoading } = useSWR('/api/products', fetcher) //It is called fetcher in the swr documentation, it is nothing more than a callback
+  
+  if(isLoading)
+    return 
+      <DotLoader color="#f6a302" />
+  const products = data.data.filter(product => product.category_id === currentCategory.id)
 
   return (
     <>
