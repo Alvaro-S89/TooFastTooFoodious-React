@@ -1,14 +1,48 @@
-import React from 'react'
+import React, { createRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import client from '../utils/axios'
+import Alert from '../components/Alert'
 
 export default function Register() {
+
+    const nameRef = createRef()
+    const directionRef = createRef()
+    const phoneRef = createRef()
+    const emailRef = createRef()
+    const passwordRef = createRef()
+    const passwordConfirmationRef = createRef()
+
+    const [errors, setErrors] = useState('')
+
+    const handleSubmit = async e => {
+        e.preventDefault()
+
+        const data = {
+            name: nameRef.current.value,
+            direction: directionRef.current.value,
+            phone: phoneRef.current.value,
+            email: emailRef.current.value,
+            password: passwordRef.current.value,
+            password_confirmation: passwordConfirmationRef.current.value
+        }
+        try {
+            const response = await client.post('/api/register', data)
+            console.log(response)
+        } catch (error) {
+            setErrors(Object.values(error.response.data.errors))
+        }
+    }
+
   return (
     <>
         <h1 className='text-4xl font-black'>Crea tu cuenta</h1>
         <p>Rellena el formulario</p>
 
         <div className='bg-white shadow-md rounded-md mt-10 px-5 py-10'>
-            <form action="">
+            <form onSubmit={handleSubmit}>
+                
+                {errors ? errors.map(error => <Alert key={error}>{error}</Alert>) : null}
+
                 <div className='mb-4'>
                     <label htmlFor="name" className='text-slate-700'>
                         Nombre:
@@ -18,7 +52,9 @@ export default function Register() {
                         id='name'
                         name='name'
                         placeholder='Tu nombre'
-                        className='mt-2 w-full p-3 bg-gray-100' />
+                        className='mt-2 w-full p-3 bg-gray-100' 
+                        ref={nameRef}
+                        />
                 </div>
 
                 <div className='mb-4'>
@@ -30,7 +66,9 @@ export default function Register() {
                         id='direction'
                         name='direction'
                         placeholder='Tu dirección'
-                        className='mt-2 w-full p-3 bg-gray-100' />
+                        className='mt-2 w-full p-3 bg-gray-100' 
+                        ref={directionRef}
+                        />
                 </div>
 
                 <div className='mb-4'>
@@ -42,7 +80,9 @@ export default function Register() {
                         id='phone'
                         name='phone'
                         placeholder='Tu teléfono'
-                        className='mt-2 w-full p-3 bg-gray-100' />
+                        className='mt-2 w-full p-3 bg-gray-100'
+                        ref={phoneRef}
+                        />
                 </div>
 
                 <div className='mb-4'>
@@ -54,7 +94,9 @@ export default function Register() {
                         id='email'
                         name='email'
                         placeholder='Tu email'
-                        className='mt-2 w-full p-3 bg-gray-100' />
+                        className='mt-2 w-full p-3 bg-gray-100' 
+                        ref={emailRef}
+                        />
                 </div>
 
                 <div className='mb-4'>
@@ -66,7 +108,9 @@ export default function Register() {
                         id='password'
                         name='password'
                         placeholder='Inserta aquí tu contraseña'
-                        className='mt-2 w-full p-3 bg-gray-100' />
+                        className='mt-2 w-full p-3 bg-gray-100' 
+                        ref={passwordRef}
+                        />
                 </div>
 
                 <div className='mb-4'>
@@ -78,7 +122,9 @@ export default function Register() {
                         id='Password_confirmation'
                         name='Password_confirmation'
                         placeholder='Repite tu contraseña'
-                        className='mt-2 w-full p-3 bg-gray-100' />
+                        className='mt-2 w-full p-3 bg-gray-100' 
+                        ref={passwordConfirmationRef}
+                        />
                 </div>
 
                 <input 
