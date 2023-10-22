@@ -1,13 +1,42 @@
-import React from 'react'
+import React, { createRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import Alert from '../components/Alert'
+import { useAuth } from '../hooks/useAuth'
+
 
 export default function Login() {
+
+    const emailRef = createRef()
+    const passwordRef = createRef()
+
+    const [errors, setErrors] = useState([])
+    const{ login } = useAuth({
+        middleware: 'guest',
+        url: '/'
+    })
+
+    const handleSubmit = async e => {
+        e.preventDefault()
+
+        const data = {
+            email: emailRef.current.value,
+            password: passwordRef.current.value,
+        }
+        
+        login(data, setErrors)
+    }
+
   return (
     <>
         <h1 className='text-4xl font-black'>Iniciar sesión</h1>
 
         <div className='bg-white shadow-md rounded-md mt-10 px-5 py-10'>
-            <form action="">
+            <form 
+                onSubmit={handleSubmit}
+                noValidate
+            >
+
+                {errors ? errors.map(error => <Alert key={error}>{error}</Alert>) : null}
 
                 <div className='mb-4'>
                     <label htmlFor="email" className='text-slate-700'>
@@ -18,7 +47,9 @@ export default function Login() {
                         id='email'
                         name='email'
                         placeholder='Tu email'
-                        className='mt-2 w-full p-3 bg-gray-100' />
+                        className='mt-2 w-full p-3 bg-gray-100' 
+                        ref={emailRef}
+                        />
                 </div>
 
                 <div className='mb-4'>
@@ -30,7 +61,9 @@ export default function Login() {
                         id='password'
                         name='password'
                         placeholder='Inserta aquí tu contraseña'
-                        className='mt-2 w-full p-3 bg-gray-100' />
+                        className='mt-2 w-full p-3 bg-gray-100' 
+                        ref={passwordRef}
+                        />
                 </div>
 
                 <input 

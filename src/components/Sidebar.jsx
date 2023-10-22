@@ -1,11 +1,14 @@
 import React from 'react'
 import Category from './Category'
 import { useProducts } from '../hooks/useProducts'
+import { useAuth } from '../hooks/useAuth'
 
 
 export default function Sidebar() {
 
     const { categories } = useProducts()
+    const { logout, data } = useAuth({middleware: 'auth'})
+
 
   return (
     <aside className='md:w-72'>
@@ -13,6 +16,16 @@ export default function Sidebar() {
             <img 
                 src="img/logo2.svg" alt="Logo"
                 className='w-60' />
+        </div>
+
+        <div className='flex items-center justify-center gap-3'>
+            <p className='font-bold'>{data?.name}</p>
+            <button 
+                className='text-center bg-orange-600 p-2 font-bold text-white'
+                onClick={logout}
+                >
+                Cerrar sesión
+            </button>
         </div>
 
         <div className='mt-10'>

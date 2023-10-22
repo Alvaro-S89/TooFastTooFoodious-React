@@ -1,7 +1,8 @@
 import React, { createRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import client from '../utils/axios'
 import Alert from '../components/Alert'
+import { useAuth } from '../hooks/useAuth'
+
 
 export default function Register() {
 
@@ -12,7 +13,8 @@ export default function Register() {
     const passwordRef = createRef()
     const passwordConfirmationRef = createRef()
 
-    const [errors, setErrors] = useState('')
+    const [errors, setErrors] = useState([])
+    const { register } = useAuth({middleware: 'guest', url: '/'})
 
     const handleSubmit = async e => {
         e.preventDefault()
@@ -25,12 +27,7 @@ export default function Register() {
             password: passwordRef.current.value,
             password_confirmation: passwordConfirmationRef.current.value
         }
-        try {
-            const response = await client.post('/api/register', data)
-            console.log(response)
-        } catch (error) {
-            setErrors(Object.values(error.response.data.errors))
-        }
+        register(data, setErrors)
     }
 
   return (
@@ -39,7 +36,10 @@ export default function Register() {
         <p>Rellena el formulario</p>
 
         <div className='bg-white shadow-md rounded-md mt-10 px-5 py-10'>
-            <form onSubmit={handleSubmit}>
+            <form 
+                onSubmit={handleSubmit}
+                noValidate
+            >
                 
                 {errors ? errors.map(error => <Alert key={error}>{error}</Alert>) : null}
 
