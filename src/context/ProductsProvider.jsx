@@ -73,6 +73,23 @@ const ProductsProvider = ({children}) => {
         toast.success('Eliminado del pedido')
     }
 
+    const handleSubmitOrder = async () => {
+        const token = localStorage.getItem('AUTH_TOKEN')
+        try {
+            await client.post('/api/order', 
+            {
+                total
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                    }
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return(
         <ProductsContext.Provider 
         value={{
@@ -87,7 +104,8 @@ const ProductsProvider = ({children}) => {
             handleAddOrder,
             handleEditQuantity,
             handleDeleteProduct,
-            total
+            total,
+            handleSubmitOrder
         }}
         >
             {children}

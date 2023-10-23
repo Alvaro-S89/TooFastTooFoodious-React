@@ -4,7 +4,13 @@ import ProductSummary from './ProductSummary'
 
 export default function Resume() {
 
-  const { order, total } = useProducts()
+  const { order, total, handleSubmitOrder } = useProducts()
+
+  const handleSubmit = e => {
+    e.preventDefault()
+
+    handleSubmitOrder()
+  }
 
   return (
     <aside className='w-72 h-screen overflow-y-scroll p-5'>
@@ -27,7 +33,10 @@ export default function Resume() {
           <p className='text-xl mt-10'>
             total:{total}§
           </p>
-          <form className='w-full'>
+          <form 
+            className='w-full'
+            onSubmit={handleSubmit}
+          >
             <div className='mt-5'>
               <input 
                 type="submit" 
