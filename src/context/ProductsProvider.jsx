@@ -76,15 +76,26 @@ const ProductsProvider = ({children}) => {
     const handleSubmitOrder = async () => {
         const token = localStorage.getItem('AUTH_TOKEN')
         try {
-            await client.post('/api/order', 
+            const {data} = await client.post('/api/order', 
             {
-                total
+                total,
+                products: order.map(product => {
+                    return {
+                        id: product.id,
+                        quantity: product.quantity
+                    }
+                }),
             },
             {
                 headers: {
                     Authorization: `Bearer ${token}`
                     }
             })
+
+            toast.success(data.message);
+            setTimeout(() => {
+                setOrder([])
+            }, 3000)
         } catch (error) {
             console.log(error)
         }
